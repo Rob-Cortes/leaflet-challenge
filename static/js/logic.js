@@ -54,7 +54,7 @@ d3.json(url).then(function(data) {
     let legend = L.control({ position: "bottomright" });
     legend.onAdd = function() {
       let div = L.DomUtil.create("div", "info legend");
-      let labels = ['<strong>Depth</strong>']
+      let labels = ['<strong>Depth</strong><br>']
       let categories = ['<1','1-3','3-5','5-7','7-9', '>9'];
       
       function getLabelColor(category) {
@@ -67,7 +67,7 @@ d3.json(url).then(function(data) {
       };
 
       for (let i = 0; i < categories.length; i++) {
-        labels.push("<li style=\"background-color: " + getLabelColor(categories[i]) + "\"></li>" + categories[i])
+        labels.push("<li style=\"background-color: " + getLabelColor(categories[i]) + "\"></li>       " + categories[i])
       };
       div.innerHTML += "<ul>" + labels.join("<br>") + "</ul>";
 
