@@ -12,4 +12,5 @@ We then add a layer representing the earthquakes in the USGS data, by calling L.
 ## Adding legend
 The CSS file contains formatting infrastructure for the legend, such as .legend {font: 14px Arial, Helvetica, sans-serif}. 
 
-The Javascript file contains instructions for populating the legend. 
+The Javascript file contains instructions for positioning and populating the legend. L.control adds a control and chooses its position (bottom-right). L.DomUtil.create('div', 'info legend') creates a `<div>` with the `legend` class. We then loop through a set of colors and labels, adding them to the legend with `div.innerHTML+=`.
+ 

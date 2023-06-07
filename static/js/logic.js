@@ -42,7 +42,6 @@ d3.json(url).then(function(data) {
     // Create an options object detailing the function called on each feature
     let myLayerOptions = {
       pointToLayer: createCircles,
-      // This is called on each feature.
       onEachFeature: function(feature, layer) {
         layer.bindPopup("<h1>" + feature.properties.place + "</h1> <hr> <h3>Mag: " + feature.properties.mag + "</h3><h3>Depth: " + feature.geometry.coordinates[2] + "</h3><h3>Time: " + new Date(feature.properties.time) + "</h3>");
       }
@@ -53,7 +52,7 @@ d3.json(url).then(function(data) {
     // Legend set up
     let legend = L.control({ position: "bottomright" });
     legend.onAdd = function() {
-      let div = L.DomUtil.create("div", "info legend");
+      let div = L.DomUtil.create("div", "legend");
       let labels = ['<strong>Depth</strong><br>']
       let categories = ['<1','1-3','3-5','5-7','7-9', '>9'];
       
