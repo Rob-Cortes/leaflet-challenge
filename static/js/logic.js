@@ -12,12 +12,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
 
-let geojson;
-
 // Fetch GeoJSON data
 d3.json(url).then(function(data) {
 
-  // Define a function to choose the color of the circles representing each earthquake
+  // Define a function to choose the color of the circles that represent each earthquake
     function chooseColor(depth) {
       if (depth < 1) return "yellow";
       else if (depth < 3) return "gold";
@@ -42,17 +40,38 @@ d3.json(url).then(function(data) {
     };
     
     // Create an options object detailing the function called on each feature
-    var myLayerOptions = {
+    let myLayerOptions = {
       pointToLayer: createCircles,
       // This is called on each feature.
       onEachFeature: function(feature, layer) {
         layer.bindPopup("<h1>" + feature.properties.place + "</h1> <hr> <h3>Mag: " + feature.properties.mag + "</h3><h3>Depth: " + feature.geometry.coordinates[2] + "</h3><h3>Time: " + new Date(feature.properties.time) + "</h3>");
       }
     };
-    // create the GeoJSON layer from the myLayerData object
-    geojson = L.geoJSON(data, myLayerOptions).addTo(myMap);
+    // Create the GeoJSON layer from the myLayerData object
+    L.geoJSON(data, myLayerOptions).addTo(myMap);
 
-    // let legend = L.control({ position: "bottomright" });
-    let limits = geojson.options.limits;
-    console.log(limits);
+    // Legend set up
+    let legend = L.control({ position: "bottomright" });
+    legend.onAdd = function() {
+      let div = L.DomUtil.create("div", "info legend");
+      let labels = ['<strong>Depth</strong>']
+      let categories = ['<1','1-3','3-5','5-7','7-9', '>9'];
+      
+      function getLabelColor(category) {
+        if (category == '<1') return "yellow";
+        else if (category == '1-3') return "gold";
+        else if (category == '3-5') return "orange";
+        else if (category == '5-7') return "darkorange";
+        else if (category == '7-9') return "firebrick";
+        else return "darkred";
+      };
+
+      for (let i = 0; i < categories.length; i++) {
+        labels.push("<li style=\"background-color: " + getLabelColor(categories[i]) + "\"></li>" + categories[i])
+      };
+      div.innerHTML += "<ul>" + labels.join("<br>") + "</ul>";
+
+      return div;
+    };
+    legend.addTo(myMap);
 });
