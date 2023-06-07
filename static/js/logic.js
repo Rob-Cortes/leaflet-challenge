@@ -19,17 +19,25 @@ d3.json(url).then(function(data) {
 
     console.log(data);
 
-    L.geoJson(data, {
-
-        style: function(feature) {
-          return {
-            color: "white",
-            fillOpacity: 0.5,
-            weight: 1.5,
-            shape: 'circle'
-          };
-        }
-
-      }).addTo(myMap);
+    function createStyle(feature) {
+      return {
+        color: 'Orange',
+        radius: feature.properties.mag*5,
+        fillOpacity: feature.geometry.coordinates[2]/15
+      }
+    }
+    
+    // create a vector circle centered on each point feature's latitude and longitude
+    function createCircles (feature, latlng) {
+      return L.circleMarker(latlng, createStyle(feature))
+    }
+    
+    // create an options object that specifies which function will called on each feature
+    var myLayerOptions = {
+      pointToLayer: createCircles
+    }
+    
+    // create the GeoJSON layer from the myLayerData object (not shown in this snippet)
+    L.geoJSON(data, myLayerOptions).addTo(myMap)
 
 });
